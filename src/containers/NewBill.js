@@ -19,6 +19,13 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+    
+    const extension =  fileName.split('.').pop() // ajout RP pour empêcher la saisie d'un document qui a une extension différente de jpg, jpeg ou png  aurions pu utiliser : <input accept="audio/*|video/*|image/*|MIME_type" />
+    if ( ! /\png|\jpg|\jpeg$/.test(extension)) { // regexp pour tester si l'extention désigne bien une image 
+      //this.document.querySelector(`input[data-testid="file"]`).setCustomValidity("extnesion interdite, mon cher !");
+      alert (`Format ${extension} non permis`)
+      return
+    }
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
@@ -46,6 +53,7 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    //console.log("type : " + bill.type)
     this.createBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
