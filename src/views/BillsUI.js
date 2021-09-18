@@ -20,6 +20,8 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
+  if(!data || data.length < 1) return ""
+
   var datesSorted = data
   datesSorted.sort(function compare(a, b) {
    if (a.date > b.date)
