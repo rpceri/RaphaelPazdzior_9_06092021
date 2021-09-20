@@ -85,8 +85,7 @@ export default class {
     if (typeof $('#modaleFileAdmin1').modal === 'function') $('#modaleFileAdmin1').modal('show')
   }
 
-  handleEditTicket(e, bill, bills) { //RP lancé lors du clic sur unticket
-    console.log('bill : ' + bill);
+  handleEditTicket(e, bill, bills) { //RP lancé lors du clic sur un ticket
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {

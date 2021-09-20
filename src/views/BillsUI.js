@@ -20,16 +20,17 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  if(!data || data.length < 1) return ""
+  //if(!data || data.length < 1) return ""
 
   var datesSorted = data
+  if(data && data.length > 1){
   datesSorted.sort(function compare(a, b) {
    if (a.date > b.date)
       return -1;
-   if (a.date < b.date )
+   else
       return 1;
-   return 0;
   });
+  }
 
   return (datesSorted && datesSorted.length) ? datesSorted.map(bill => row(bill)).join("") : ""
 }
