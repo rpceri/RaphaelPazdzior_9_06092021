@@ -15,7 +15,7 @@ export default () => {
                 <div class="col-md-6">
                   <div class="col-half">
                     <label for="expense-type" class="bold-label">Type de dépense</label>
-                      <select required class="form-control blue-border" data-testid="expense-type">
+                      <select required class="form-control blue-border" id="expense-type" data-testid="expense-type">
                         <option>Transports</option>
                         <option>Restaurants et bars</option>
                         <option>Hôtel et logement</option>

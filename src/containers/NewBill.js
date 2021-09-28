@@ -19,13 +19,15 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+    //const fileName = file.name // au lieu de ci dessus car impossible de tester, mais reviens ua meme au final
     
     const extension =  fileName.split('.').pop() // ajout RP pour empêcher la saisie d'un document qui a une extension différente de jpg, jpeg ou png  aurions pu utiliser : <input accept="audio/*|video/*|image/*|MIME_type" />
     if ( ! /\png|\jpg|\jpeg$/.test(extension)) { // regexp pour tester si l'extention désigne bien une image 
-      //this.document.querySelector(`input[data-testid="file"]`).setCustomValidity("extnesion interdite, mon cher !");
+      this.document.querySelector(`input[data-testid="file"]`).setCustomValidity("extension interdite !");
       alert (`Format ${extension} non permis`)
       return
     }
+    //else alert (`ok`)
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
@@ -59,6 +61,7 @@ export default class NewBill {
   }
 
   // not need to cover this function by tests
+/* istanbul ignore next */
   createBill = (bill) => {
     if (this.firestore) {
       this.firestore

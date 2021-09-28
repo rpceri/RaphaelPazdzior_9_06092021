@@ -68,7 +68,7 @@ describe("Given I am connected as an employee", () => {
        expect(screen.getAllByText('Loading...')).toBeTruthy()
      })
 
-     test("Then la page sans notes doit comporter un tabelau vide", () => {
+     test("Then la page sans notes doit comporter un tableau vide", () => {
       const html = BillsUI({})
       document.body.innerHTML = html
       expect(
