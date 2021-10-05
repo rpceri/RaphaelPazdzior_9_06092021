@@ -15,19 +15,32 @@ export default class NewBill {
     this.fileName = null
     new Logout({ document, localStorage, onNavigate })
   }
+  
   handleChangeFile = e => {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     //const fileName = file.name // au lieu de ci dessus car impossible de tester, mais reviens ua meme au final
-    
-    const extension =  fileName.split('.').pop() // ajout RP pour empêcher la saisie d'un document qui a une extension différente de jpg, jpeg ou png  aurions pu utiliser : <input accept="audio/*|video/*|image/*|MIME_type" />
+
+     // ajout RP pour empêcher la saisie d'un document qui a une extension différente de jpg, jpeg ou png, aurions pu utiliser : <input accept="audio/*|video/*|image/*|MIME_type" /> :
+     // suppr des éventuelles erreurs précédentes si l'utilisateur a soumis un mauvais fichier une première fois :
+    if(document.getElementById('alertFile')) this.document.querySelector(`span[id="alertFile"]`).innerHTML = "";
+    this.document.querySelector(`input[data-testid="file"]`).setCustomValidity("");
+
+    const extension =  fileName.split('.').pop()
     if ( ! /\png|\jpg|\jpeg$/.test(extension)) { // regexp pour tester si l'extention désigne bien une image 
-      this.document.querySelector(`input[data-testid="file"]`).setCustomValidity("extension interdite !");
-      alert (`Format ${extension} non permis`)
+      var MessageErreur =  `${fileName} : Format ${extension} non permis`
+
+      //creation d'une span en dessous de l'imput pour message d'erreur
+      var el = document.createElement("span");
+      el.setAttribute("id", "alertFile");
+      el.innerHTML = MessageErreur;
+      var div = this.document.querySelector(`input[data-testid="file"]`)
+      div.parentNode.insertBefore(el, div.nextSibling);
+      this.document.querySelector(`input[data-testid="file"]`).setCustomValidity(MessageErreur); // utile pour blocker la soumission du formulaire
       return
     }
-    //else alert (`ok`)
+
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)

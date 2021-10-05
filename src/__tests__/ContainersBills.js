@@ -6,14 +6,14 @@ $.fn.modal = jest.fn(); // pour pouvoir utiliser bootstrap, utile pour $('#modal
 
 import '@testing-library/jest-dom'// ajout RP idem ci dessus (permet d'utiliser par ex toHaveTextContent (matchers propre aux dom de jest))
 
-import {getByTestId} from "@testing-library/dom"
+import {getByTestId,  screen} from "@testing-library/dom"
 import userEvent from '@testing-library/user-event' // permet de completer les form et faire des clic de souris
 
 import Bills from "../containers/Bills.js"
 import { ROUTES } from "../constants/routes"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 
-
+import firebase from "../__mocks__/firebase" // contient des données mockées pour test (methode get renvoyant 4 data)
 
 
 describe('container/Bills', () => {
@@ -74,29 +74,15 @@ describe('container/Bills', () => {
   describe('Given I am connected as Employee', () => {
 
     describe('When I am on bills page', () => {
-      test('getBills should\'nt be called simply', () => {
-        Object.defineProperty(window, 'localStorage', { value: localStorage })
-        window.localStorage.setItem('user', JSON.stringify({type: 'Employee' })) // Employee ou Admin
-        window.localStorage.setItem('user', JSON.stringify({email: 'thomas@facadia.com' }))
 
-      var pathname = '#employee/bills'
-      document.body.innerHTML = ROUTES({ pathname })  
-     // document.querySelector(`tbody[data-testid="tbody"]`).innerHTML = contenuHtml
-      const onNavigate = (pathname) => {
-          document.body.innerHTML = ROUTES({ pathname })
-          //document.querySelector(`tbody[data-testid="tbody"]`).innerHTML = contenuHtml
-        }
-        const firestore = null
-        const bills = new Bills({ document, onNavigate, firestore, localStorage: window.localStorage  })
-  
-        const getSpy = jest.spyOn(bills, "getBills")
-        //const billsss = bills.getBills()
-        expect(getSpy).toHaveBeenCalledTimes(0)
-      })
+      test("fetches bills from mock API GET", async () => {
+        const getSpy = jest.spyOn(firebase, "get")
+        const bills = await firebase.get() //bills contient des données mockées
+        expect(getSpy).toHaveBeenCalledTimes(1)
+        expect(bills).toBeDefined
+        expect(bills.data.length).toBe(4) // les données mockées (firebase) contiennent 4 data
+     })
     })
-
   })
-
-
 
 })
